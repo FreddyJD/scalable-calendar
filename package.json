@@ -1,0 +1,25 @@
+{
+  "name": "scalable-calendar",
+  "version": "0.0.1",
+  "description": "scale calendar",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FreddyJD/scalable-calendar.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FreddyJD/scalable-calendar/issues"
+  },
+  "homepage": "https://github.com/FreddyJD/scalable-calendar#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "firebase-admin": "^7.2.0",
+    "handlebars": "^4.1.1"
+  }
+}
