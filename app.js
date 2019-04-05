@@ -15,8 +15,14 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
+
 app.use(function (req, res, next) {
     hbs.handlebars.registerHelper('json', function (obj) {
+        obj = [{
+            title: 'Freddy J.',
+            url: 'https://www.linkedin.com/in/freddyjd/',
+            start: '2019-04-28'
+        }];
         return new hbs.handlebars.SafeString(JSON.stringify(obj))
     });
     next();
