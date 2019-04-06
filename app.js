@@ -53,7 +53,7 @@ app.get("/api/school/:school", (req, res) => {
 
   db.ref(`schools/${school}`).on("value", snapshot => {
     const data = snapshot.val();
-    res.json(data.Professors);
+    res.json(data);
   });
 });
 
@@ -65,18 +65,14 @@ app.get("/api/all", (req, res) => {
 
 // Calendar route
 app.get(
-  "/calendar/:school",
+  "/calendar",
   async (req, res, next) => {
-    // Connect to the database
-    await db.ref(`schools/${req.params.school}`).on("value", snapshot => {
-        const data = snapshot.val();
+    const data = await db.ref(`schools/${req.query.school}`).once("value");
+    let snap = data.val();
 
-        // Express-Handlebars middleware.
-        // This middleware will render calendar's data object.
-        hbs.handlebars.registerHelper("json", function(obj) {
-            obj = data.Professors;
-            return new hbs.handlebars.SafeString(JSON.stringify(obj));
-          });
+    hbs.handlebars.registerHelper("json", function(data) {
+      snap = snap.Professors;
+      return new hbs.handlebars.SafeString(JSON.stringify(snap));
     });
     next();
   },
@@ -89,4 +85,3 @@ app.get(
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`http://localhost:${port}!`));
-
