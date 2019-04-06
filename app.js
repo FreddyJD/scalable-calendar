@@ -3,70 +3,90 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const firebase = require("firebase-admin");
 const path = require("path");
+const cors = require("cors");
 const app = express();
 const hbs = exphbs.create();
-const bodyParser = require('body-parser')
+const bodyParser = require("body-parser");
 
-// Connection to Firebase admin database 
+// Connection to Firebase admin database
 var serviceAccount = require("./config/serviceAccountKey.json");
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://calendar-1946d.firebaseio.com"
 });
 
-// Handlebar middleware
+var db = firebase.database();
+var ref = db.ref("schools");
+
+// Middleware | CORS
+app.use(cors());
+
+// Middleware | Handlebar
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
-// Body-parser middleware | parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
 
-// Index route (this will render the home view)
-app.get('/', (req, res,) => { 
-    res.render("home", {layout: false})
+// Middleware | Body-parser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+  res.render("home", { layout: false });
 });
 
-const tempdata = []; 
+app.post("/api/add", (req, res) => {
+  console.log(req.body.data);
 
-app.post('/api/add',(req,res) => {
-    console.log(req.body)
+  let school = req.body.school.toLowerCase();
+  school = school.split(" ").join("-");
 
-    tempdata.push(req.body);
-    res.end("yes");
+  ref.child(school).set({
+    Professors: JSON.parse(req.body.data)
+  });
+
+  res.end("yes");
 });
 
-app.get('/api/all', (req, res,) => { 
-    res.json(tempdata)
+app.get("/api/school/:school", (req, res) => {
+  const school = req.params.school;
+  const arr = [];
+
+  db.ref(`schools/${school}`).on("value", snapshot => {
+    const data = snapshot.val();
+    res.json(data.Professors);
+  });
 });
 
-// Calendar route 
-app.get("/calendar", (req, res, next) => {
+app.get("/api/all", (req, res) => {
+  ref.once("value", function(snapshot) {
+    res.json(snapshot);
+  });
+});
 
-    // Express-Handlebars middleware.
-    // This middleware will render calendar's data object. 
-    hbs.handlebars.registerHelper('json', function (obj) {
-        obj = [{
-            title: 'Freddy J.',
-            daysOfWeek: '1T7:00:00'
-        }, 
-        {
-            title: 'Freddy J. - 1AM',
-            daysOfWeek: '1T8:00:00',
-        },
-        {
-            title: 'Freddy J. - 1AM',
-            daysOfWeek: '1T8:00:00',
-        }];
-        return new hbs.handlebars.SafeString(JSON.stringify(obj))
+// Calendar route
+app.get(
+  "/calendar/:school",
+  async (req, res, next) => {
+    // Connect to the database
+    await db.ref(`schools/${req.params.school}`).on("value", snapshot => {
+        const data = snapshot.val();
+
+        // Express-Handlebars middleware.
+        // This middleware will render calendar's data object.
+        hbs.handlebars.registerHelper("json", function(obj) {
+            obj = data.Professors;
+            return new hbs.handlebars.SafeString(JSON.stringify(obj));
+          });
     });
     next();
-}, (req, res) => { 
+  },
+  (req, res) => {
     res.render("calendar", {
-        layout: false,
-      });
-});
-
+      layout: false
+    });
+  }
+);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`http://localhost:${port}!`));
+

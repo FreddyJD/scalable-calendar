@@ -1,21 +1,35 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
 <link href="https://bootswatch.com/4/lux/bootstrap.css" rel="stylesheet" id="bootstrap-css">
 
 <div class="jumbotron text-center">
-        <img src="assets/logo-medium.png" style="width: 10%">
+    <img src="assets/logo-medium.png" style="width: 10%">
 
-        <h1 class="display-4">Calendar</h1>
-        <p class="lead">A proof of concept of a calendar architecture.</p>
+    <h1 class="display-4">Calendar</h1>
+    <p class="lead">A proof of concept of a calendar architecture.</p>
+
 </div>
 
 
 <div class="container">
 
-    <input type="button" class="btn btn-md btn-primary mb-2" id="addrow" value="Add Professor" />
-    
-    <table id="myTable" class="table order-list">
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <input type="button" class="btn btn-md btn-primary mb-2" id="addrow" value="Add Professor" />
+
+        </div>
+        <div class="col-md-10">
+            <input type="text" class="form-control" id="school-name" required />
+
+        </div>
+    </div>
+
+    <table id="myTable" class="table order-list mb-3">
         <thead>
             <tr>
                 <td>First Name</td>
@@ -26,8 +40,20 @@
         <tbody id="data"></tbody>
     </table>
 
-    <input type="button" class="btn btn-md btn-block btn-primary" id="saveData" value="Generate Calendar" />
+    <input type="button" class="btn btn-md btn-block btn-primary mb-5" id="saveData" value="Generate Calendar" />
 
 </div>
+
+<script>
+    // A place holder on first load.
+    let type = ['School of', 'University of', 'Institute of'];
+    let place = ['North', 'East', 'West', 'South'];
+    let name = ['Charlotte', 'Valley', 'Tree'];
+    type = type[Math.floor(Math.random() * type.length)]
+    place = place[Math.floor(Math.random() * place.length)]
+    name = name[Math.floor(Math.random() * name.length)]
+
+    $("#school-name").val(`${type} ${place} ${name}`)
+</script>
 
 <script src='lib/formControl.js'></script>
