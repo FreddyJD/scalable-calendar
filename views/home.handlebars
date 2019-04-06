@@ -1,0 +1,33 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<link href="https://bootswatch.com/4/lux/bootstrap.css" rel="stylesheet" id="bootstrap-css">
+
+<div class="jumbotron text-center">
+        <img src="assets/logo-medium.png" style="width: 10%">
+
+        <h1 class="display-4">Calendar</h1>
+        <p class="lead">A proof of concept of a calendar architecture.</p>
+</div>
+
+
+<div class="container">
+
+    <input type="button" class="btn btn-md btn-primary mb-2" id="addrow" value="Add Professor" />
+    
+    <table id="myTable" class="table order-list">
+        <thead>
+            <tr>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Day Available</td>
+            </tr>
+        </thead>
+        <tbody id="data"></tbody>
+    </table>
+
+    <input type="button" class="btn btn-md btn-block btn-primary" id="saveData" value="Generate Calendar" />
+
+</div>
+
+<script src='lib/formControl.js'></script>
