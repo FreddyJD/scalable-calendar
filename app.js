@@ -44,7 +44,7 @@ app.post("/api/add", (req, res) => {
     Professors: JSON.parse(req.body.data)
   });
 
-  res.end("yes");
+  res.end("501");
 });
 
 app.get("/api/school/:school", (req, res) => {
